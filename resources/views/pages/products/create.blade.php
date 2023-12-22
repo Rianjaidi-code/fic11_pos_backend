@@ -28,7 +28,7 @@
                 <h2 class="section-title">Products</h2>
 
                 <div class="card">
-                    <form action="{{ route('productDetail.store') }}" method="POST">
+                    <form action="{{ route('productDetail.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="card-header">
                             <h4>Input Text</h4>
@@ -109,9 +109,25 @@
 
                                 </div>
                             </div>
-                            <div class="card-footer text-right">
-                                <button class="btn btn-primary">Submit</button>
+
+                            <div class="form-group">
+                                <label>Photo Product</label>
+                                <div class="col-sm-9">
+                                    <input type="file" class="form-control" name="image"
+                                        @error('image') is-invalid
+
+                                    @enderror>
+                                </div>
+                                @error('image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
+                        </div>
+                        <div class="card-footer text-right">
+                            <button class="btn btn-primary">Submit</button>
+                        </div>
                     </form>
                 </div>
             </div>
