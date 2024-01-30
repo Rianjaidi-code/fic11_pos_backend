@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->integer('id_barcode')->default(0);
             //desc
             $table->text('description')->nullable();
             //price

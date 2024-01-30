@@ -28,7 +28,8 @@
                 <h2 class="section-title">Products</h2>
 
                 <div class="card">
-                    <form action="{{ route('productDetail.update', $product) }}" method="POST">
+                    <form action="{{ route('productDetail.update', $product) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <div class="card-header">
@@ -43,6 +44,20 @@
                             @enderror"
                                     name="name" value="{{ $product->name }}">
                                 @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label>Id Barcode</label>
+                                <input type="text"
+                                    class="form-control @error('id_barcode')
+                                is-invalid
+                            @enderror"
+                                    name="id_barcode" value="{{ $product->id_barcode }}">
+                                @error('id_barcode')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -111,6 +126,20 @@
                                     </label>
 
                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Photo Product</label>
+                                <div class="col-sm-9">
+                                    <input type="file" class="form-control" name="image"
+                                        @error('image') is-invalid
+
+                                    @enderror>
+                                </div>
+                                @error('image')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
                             </div>
                             <div class="card-footer text-right">
                                 <button class="btn btn-primary">Submit</button>

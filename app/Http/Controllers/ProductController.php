@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -28,6 +29,7 @@ class ProductController extends Controller
         //validate form
         $request->validate([
             'name' => 'required|min:3|unique:products',
+            'id_barcode' => 'required',
             'description' => 'required|min:10',
             'price' => 'required|integer',
             'stock' => 'required|integer',
@@ -41,6 +43,7 @@ class ProductController extends Controller
 
         $product = new \App\Models\Product();
         $product->name = $request->name;
+        $product->id_barcode = $request->id_barcode;
         $product->description = $request->description;
         $product->price = (int) $request->price;
         $product->stock = (int) $request->stock;
@@ -59,9 +62,36 @@ class ProductController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = $request->all();
+
         $product = \App\Models\Product::findOrFail($id);
-        $product->update($data);
+        $product->name = $request->name;
+        $product->id_barcode = $request->id_barcode;
+        $product->description = $request->description;
+        $product->price = (int) $request->price;
+        $product->stock = (int) $request->stock;
+        $product->category = $request->category;
+
+
+        if ($request->hasFile('image')) {
+            // Hapus gambar lama jika ada
+            if ($product->image) {
+                $oldImagePath = 'public/products/' . $product->image;
+                if (Storage::exists($oldImagePath)) {
+                    Storage::delete($oldImagePath);
+                }
+            }
+
+            // Upload gambar baru
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->storeAs('public/products/', $filename);
+            $product->image = $filename;
+        }
+
+        // Update product data
+        $product->save();
+
         return redirect()->route('productDetail.index')->with('success', 'Product successfully updated');
     }
 

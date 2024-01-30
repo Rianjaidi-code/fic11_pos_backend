@@ -49,6 +49,20 @@
                             </div>
 
                             <div class="form-group">
+                                <label>ID Barcode</label>
+                                <input type="text"
+                                    class="form-control @error('id_barcode')
+                                is-invalid
+                            @enderror"
+                                    name="id_barcode">
+                                @error('id_barcode')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
                                 <label>Stock</label>
                                 <input type="number"
                                     class="form-control @error('stock')
